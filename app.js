@@ -18,6 +18,7 @@ function saveTodos(list) {
 
 // ===== 状态：整个应用只有这一份数据 =====
 let todos = loadTodos();
+let currentFilter = 'all'; // all | active | done
 
 // ===== 页面元素 =====
 const form = document.getElementById('todo-form');
@@ -25,19 +26,34 @@ const input = document.getElementById('todo-input');
 const listEl = document.getElementById('todo-list');
 const countEl = document.getElementById('todo-count');
 const clearDoneBtn = document.getElementById('clear-done');
+const filterButtons = document.querySelectorAll('.filter');
 
 // ===== 渲染：把数据画到页面上 =====
+/** 按当前筛选条件挑出要显示的待办 */
+function visibleTodos() {
+  if (currentFilter === 'active') return todos.filter((t) => !t.done);
+  if (currentFilter === 'done') return todos.filter((t) => t.done);
+  return todos;
+}
+
 function render() {
   listEl.innerHTML = '';
 
-  if (todos.length === 0) {
+  const shown = visibleTodos();
+
+  if (shown.length === 0) {
     const empty = document.createElement('li');
     empty.className = 'empty';
-    empty.textContent = '还没有待办，先添加一条吧 👆';
+    empty.textContent =
+      todos.length === 0
+        ? '还没有待办，先添加一条吧 👆'
+        : currentFilter === 'done'
+          ? '还没有已完成的待办'
+          : '全部完成了 🎉';
     listEl.appendChild(empty);
   }
 
-  todos.forEach((todo) => {
+  shown.forEach((todo) => {
     const li = document.createElement('li');
     li.className = todo.done ? 'todo done' : 'todo';
 
@@ -92,6 +108,14 @@ form.addEventListener('submit', (event) => {
   addTodo(text);
   input.value = '';
   input.focus();
+});
+
+filterButtons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    currentFilter = btn.dataset.filter;
+    filterButtons.forEach((b) => b.classList.toggle('is-active', b === btn));
+    render();
+  });
 });
 
 clearDoneBtn.addEventListener('click', () => {

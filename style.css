@@ -84,6 +84,33 @@ body {
   background: var(--brand-dark);
 }
 
+.filters {
+  display: flex;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.filter {
+  padding: 5px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  background: #f3f4f6;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.filter:hover {
+  color: var(--brand);
+}
+
+.filter.is-active {
+  color: var(--brand);
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
 .todo-list {
   margin: 20px 0 0;
   padding: 0;
