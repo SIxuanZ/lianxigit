@@ -1,0 +1,2 @@
+# 统一换行符：仓库里统一用 LF，Windows 上检出也不报警告
+* text=auto
