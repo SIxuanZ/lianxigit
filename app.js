@@ -66,6 +66,8 @@ function render() {
     text.className = 'todo-text';
     // 用 textContent 而不是 innerHTML：用户输入的内容不会被当成 HTML 执行
     text.textContent = todo.text;
+    // 双击文字进入编辑
+    text.addEventListener('dblclick', () => startEdit(todo, text));
 
     const del = document.createElement('button');
     del.className = 'delete';
@@ -97,6 +99,44 @@ function toggleTodo(id) {
 
 function removeTodo(id) {
   todos = todos.filter((t) => t.id !== id);
+  saveTodos(todos);
+  render();
+}
+
+/** 双击待办文字进入编辑：回车保存，Esc 取消，点别处也算保存 */
+function startEdit(todo, textEl) {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'edit-input';
+  input.value = todo.text;
+  input.maxLength = 100;
+
+  let finished = false;
+
+  function finish(save) {
+    if (finished) return;
+    finished = true;
+    const value = input.value.trim();
+    if (save && value) {
+      updateTodo(todo.id, value);
+    } else {
+      render(); // 取消或改成空：保持原样
+    }
+  }
+
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') finish(true);
+    if (event.key === 'Escape') finish(false);
+  });
+  input.addEventListener('blur', () => finish(true));
+
+  textEl.replaceWith(input);
+  input.focus();
+  input.select();
+}
+
+function updateTodo(id, text) {
+  todos = todos.map((t) => (t.id === id ? { ...t, text } : t));
   saveTodos(todos);
   render();
 }
