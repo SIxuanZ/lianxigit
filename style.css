@@ -142,6 +142,21 @@ body {
   font-size: 15px;
   line-height: 1.5;
   word-break: break-word;
+  cursor: text;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  background: #f9fafb;
+  border: 1px solid var(--brand);
+  border-radius: 8px;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .todo.done .todo-text {
